@@ -198,6 +198,44 @@ final class StretchLogicTests: XCTestCase {
         }
     }
 
+    // MARK: - Milestones
+
+    func testMilestoneProjectionFirstOfDayExtendsStreak() {
+        // Today not yet done (todayCount 0), 2-day prior streak → finishing makes it 3.
+        let snap = StretchSnapshot(todayCount: 0, streakDays: 2)
+        let p = StretchMilestone.project(from: snap)
+        XCTAssertEqual(p.today, 1)
+        XCTAssertEqual(p.streak, 3)
+    }
+
+    func testMilestoneProjectionLaterSameDayKeepsStreak() {
+        // Already stretched today → streak already counts today; another doesn't bump it.
+        let snap = StretchSnapshot(todayCount: 4, streakDays: 7)
+        let p = StretchMilestone.project(from: snap)
+        XCTAssertEqual(p.today, 5)
+        XCTAssertEqual(p.streak, 7)
+    }
+
+    func testMilestoneLineStreakTakesPriority() {
+        // streak 3 and today 5 both land → streak wins.
+        XCTAssertEqual(StretchMilestone.line(streakDays: 3, todayCount: 5), "A 3-day rhythm.")
+    }
+
+    func testMilestoneLineTodayCount() {
+        XCTAssertEqual(StretchMilestone.line(streakDays: 4, todayCount: 5), "5 today. Lovely.")
+    }
+
+    func testMilestoneLineNilOffMilestone() {
+        XCTAssertNil(StretchMilestone.line(streakDays: 4, todayCount: 3))
+        XCTAssertNil(StretchMilestone.line(streakDays: 0, todayCount: 0))
+    }
+
+    func testMilestoneEndToEndFirstStretchOfDayHittingStreakThree() {
+        // Pre-completion: nothing today, 2-day streak → this completion = 3-day rhythm.
+        let snap = StretchSnapshot(todayCount: 0, streakDays: 2)
+        XCTAssertEqual(StretchMilestone.line(afterCompleting: snap), "A 3-day rhythm.")
+    }
+
     func testActiveRegionsDefaultsToAll() {
         var s = StretchSettings()
         XCTAssertEqual(s.activeRegions, Set(Stretch.Region.allCases))  // nil → all
