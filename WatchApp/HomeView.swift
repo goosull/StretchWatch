@@ -38,7 +38,14 @@ struct HomeView: View {
             }
             .onAppear {
                 refresh()
-                if CommandLine.arguments.contains("-previewHome") { authStatus = .authorized }
+                if CommandLine.arguments.contains("-previewHome") {
+                    authStatus = .authorized
+                    // Seed a sample so the week strip has intensity to show.
+                    snapshot = StretchSnapshot(
+                        todayCount: 3, streakDays: 4, weeklyActiveDays: 5,
+                        weeklyCounts: [0, 2, 1, 3, 0, 1, 3],
+                        lastCompleted: Date(), updatedAt: Date())
+                }
                 // Dev-only: `-previewSession <moveId>` opens a stretch for screenshots.
                 if let i = CommandLine.arguments.firstIndex(of: "-previewSession") {
                     let moveId = CommandLine.arguments[safe: i + 1] ?? "sh-roll"
@@ -79,6 +86,8 @@ struct HomeView: View {
                     .frame(maxWidth: .infinity).padding(.vertical, 4)
             }
             .tint(Theme.ember)
+
+            WatchWeekStrip(counts: snapshot.weeklyCounts)
 
             if snapshot.streakDays > 1 {
                 Text("\(snapshot.streakDays)-day rhythm")
@@ -154,6 +163,8 @@ struct HomeView: View {
     }
 
     private func refresh() {
+        // In screenshot preview the seeded sample owns the snapshot; don't clobber it.
+        if CommandLine.arguments.contains("-previewHome") { return }
         snapshot = TriggerEngine.loadSnapshot()
         minutesToNext = TriggerEngine.minutesToNextFire
         Task {
@@ -171,6 +182,41 @@ struct HomeView: View {
         if CommandLine.arguments.contains("-previewHome") { return }
         let status = await TriggerEngine.authStatus()
         await MainActor.run { authStatus = status }
+    }
+}
+
+/// A compact 7-day intensity strip for the watch home — the same single-hue ember
+/// ramp as the iOS heatmap, shrunk to fit the wrist. No weekday labels (too cramped);
+/// today gets a ring, and one VoiceOver label summarizes the week so the meaning
+/// never rides on color alone. A pre-heatmap snapshot decodes empty → all-dim.
+private struct WatchWeekStrip: View {
+    let counts: [Int]
+
+    private var week: [Int] { counts.count == 7 ? counts : Array(repeating: 0, count: 7) }
+
+    private func fill(_ count: Int) -> Color {
+        switch StretchStore.heatLevel(count) {
+        case 0:  return Theme.ink2
+        case 1:  return Theme.ember.opacity(0.35)
+        case 2:  return Theme.ember.opacity(0.6)
+        default: return Theme.ember
+        }
+    }
+
+    var body: some View {
+        HStack(spacing: 5) {
+            ForEach(0..<7, id: \.self) { i in
+                RoundedRectangle(cornerRadius: 3, style: .continuous)
+                    .fill(fill(week[i]))
+                    .frame(width: 13, height: 13)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 3, style: .continuous)
+                            .stroke(Theme.ember, lineWidth: i == 6 ? 1.2 : 0)
+                    )
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("This week: \(week.filter { $0 > 0 }.count) of 7 days, \(week.reduce(0, +)) stretches")
     }
 }
 
