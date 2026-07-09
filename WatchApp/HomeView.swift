@@ -47,6 +47,11 @@ struct HomeView: View {
                         weeklyCounts: [0, 2, 1, 3, 0, 1, 3],
                         lastCompleted: Date(), updatedAt: Date())
                 }
+                // Authorized but no history yet — the first-run home state.
+                if CommandLine.arguments.contains("-previewFirstRun") {
+                    authStatus = .authorized
+                    snapshot = StretchSnapshot()
+                }
                 // Dev-only: `-previewSession <moveId>` opens a stretch for screenshots.
                 if let i = CommandLine.arguments.firstIndex(of: "-previewSession") {
                     let moveId = CommandLine.arguments[safe: i + 1] ?? "sh-roll"
@@ -67,6 +72,24 @@ struct HomeView: View {
                 .font(Theme.display(10, .medium)).tracking(1.5)
                 .foregroundStyle(Theme.haze)
 
+            if snapshot.hasHistory { reflection } else { firstRun }
+
+            stretchButton
+
+            if snapshot.hasHistory {
+                WatchWeekStrip(counts: snapshot.weeklyCounts)
+                if snapshot.streakDays > 1 {
+                    Text("\(snapshot.streakDays)-day rhythm")
+                        .font(Theme.display(11, .regular)).foregroundStyle(Theme.calm)
+                }
+            }
+        }
+        .padding(.horizontal, 8)
+    }
+
+    /// Today's count once there's a rhythm to reflect.
+    private var reflection: some View {
+        VStack(spacing: 6) {
             VStack(spacing: 0) {
                 Text("\(snapshot.todayCount)")
                     .font(Theme.display(46, .semibold)).monospacedDigit()
@@ -80,22 +103,29 @@ struct HomeView: View {
 
             Text(nextLine)
                 .font(Theme.display(12, .regular)).foregroundStyle(Theme.haze)
-
-            Button(action: { router.startNow() }) {
-                Text("Stretch now")
-                    .font(Theme.display(15, .semibold))
-                    .frame(maxWidth: .infinity).padding(.vertical, 4)
-            }
-            .tint(Theme.ember)
-
-            WatchWeekStrip(counts: snapshot.weeklyCounts)
-
-            if snapshot.streakDays > 1 {
-                Text("\(snapshot.streakDays)-day rhythm")
-                    .font(Theme.display(11, .regular)).foregroundStyle(Theme.calm)
-            }
         }
-        .padding(.horizontal, 8)
+    }
+
+    /// First run, permission granted but nothing eased yet: an invitation, not a zero.
+    private var firstRun: some View {
+        VStack(spacing: 3) {
+            Text("Ready when you are")
+                .font(Theme.display(18, .semibold)).foregroundStyle(Theme.paper)
+            Text(nextLine == "no reminder set" ? "Your first ease starts here." : nextLine)
+                .font(Theme.display(11, .regular)).foregroundStyle(Theme.haze)
+                .multilineTextAlignment(.center)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Ready when you are. Your first ease starts here.")
+    }
+
+    private var stretchButton: some View {
+        Button(action: { router.startNow() }) {
+            Text("Stretch now")
+                .font(Theme.display(15, .semibold))
+                .frame(maxWidth: .infinity).padding(.vertical, 4)
+        }
+        .tint(Theme.ember)
     }
 
     // MARK: - First run
@@ -165,7 +195,8 @@ struct HomeView: View {
 
     private func refresh() {
         // In screenshot preview the seeded sample owns the snapshot; don't clobber it.
-        if CommandLine.arguments.contains("-previewHome") { return }
+        if CommandLine.arguments.contains("-previewHome")
+            || CommandLine.arguments.contains("-previewFirstRun") { return }
         snapshot = TriggerEngine.loadSnapshot()
         minutesToNext = TriggerEngine.minutesToNextFire
         Task {
