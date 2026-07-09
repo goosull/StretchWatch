@@ -15,7 +15,7 @@ struct ContentView: View {
                 header
                 todayHero
                 weekStrip
-                if snap.streakDays > 1 { streak }
+                rhythm
                 Spacer()
                 footer
             }
@@ -77,9 +77,19 @@ struct ContentView: View {
         return f.string(from: day)
     }
 
-    private var streak: some View {
-        Text("\(snap.streakDays)-day rhythm")
-            .font(Theme.display(14, .medium)).foregroundStyle(Theme.calm)
+    /// Current rhythm, with your all-time best beneath it when the record beats
+    /// today's run — a quiet thing to reach back toward, never a scold.
+    @ViewBuilder private var rhythm: some View {
+        VStack(spacing: 2) {
+            if snap.streakDays > 1 {
+                Text("\(snap.streakDays)-day rhythm")
+                    .font(Theme.display(14, .medium)).foregroundStyle(Theme.calm)
+            }
+            if snap.bestStreakDays > 1, snap.bestStreakDays > snap.streakDays {
+                Text("best: \(snap.bestStreakDays) days")
+                    .font(Theme.display(11, .regular)).foregroundStyle(Theme.haze)
+            }
+        }
     }
 
     private var footer: some View {
