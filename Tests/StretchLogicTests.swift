@@ -106,6 +106,26 @@ final class StretchLogicTests: XCTestCase {
         XCTAssertEqual(StretchStore.snapshot(from: events, calendar: cal, now: now).todayCount, 2)
     }
 
+    // MARK: - Empty state (has-history)
+
+    func testHasHistoryFalseForFreshSnapshot() {
+        let snap = StretchStore.snapshot(from: [], calendar: cal, now: date(2026, 7, 8))
+        XCTAssertFalse(snap.hasHistory)
+    }
+
+    func testHasHistoryTrueAfterAnyCompletion() {
+        // A completion outside the trailing week still counts as history.
+        let events = [completed(date(2026, 5, 1))]
+        let snap = StretchStore.snapshot(from: events, calendar: cal, now: date(2026, 7, 8))
+        XCTAssertEqual(snap.weeklyActiveDays, 0)   // old, not in the week
+        XCTAssertTrue(snap.hasHistory)             // but lastCompleted is set
+    }
+
+    func testHasHistoryTrueForTodayOnly() {
+        let events = [completed(date(2026, 7, 8, 9))]
+        XCTAssertTrue(StretchStore.snapshot(from: events, calendar: cal, now: date(2026, 7, 8, 15)).hasHistory)
+    }
+
     // MARK: - Best rhythm (longest-ever streak)
 
     func testBestStreakLongestRunAcrossHistory() {

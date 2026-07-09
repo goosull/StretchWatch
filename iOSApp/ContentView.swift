@@ -13,11 +13,17 @@ struct ContentView: View {
             Theme.ink.ignoresSafeArea()
             VStack(spacing: 28) {
                 header
-                todayHero
-                weekStrip
-                rhythm
-                Spacer()
-                footer
+                if snap.hasHistory {
+                    todayHero
+                    weekStrip
+                    rhythm
+                    Spacer()
+                    footer
+                } else {
+                    Spacer()
+                    emptyState
+                    Spacer()
+                }
             }
             .padding(.horizontal, 24)
             .padding(.top, 40)
@@ -31,6 +37,24 @@ struct ContentView: View {
                 .font(Theme.display(20, .semibold)).foregroundStyle(Theme.paper)
             Spacer()
         }
+    }
+
+    /// First-run state: no stretch has ever been completed. A calm invitation
+    /// instead of a wall of zeros — the dashboard is a mirror with nothing to
+    /// reflect yet.
+    private var emptyState: some View {
+        VStack(spacing: 10) {
+            Image(systemName: "figure.cooldown")
+                .font(.system(size: 40, design: .rounded))
+                .foregroundStyle(Theme.ember.opacity(0.9))
+            Text("Nothing to mirror yet")
+                .font(Theme.display(20, .semibold)).foregroundStyle(Theme.paper)
+            Text("Your first ease will show up here.\nStretch on the watch to begin.")
+                .font(Theme.display(13, .regular)).foregroundStyle(Theme.haze)
+                .multilineTextAlignment(.center)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Nothing to mirror yet. Stretch on the watch to begin.")
     }
 
     private var todayHero: some View {
