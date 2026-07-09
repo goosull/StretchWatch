@@ -144,4 +144,11 @@ struct StretchSnapshot: Codable, Sendable {
     var bestStreakDays = 0
     var lastCompleted: Date?
     var updatedAt = Date()
+
+    /// Whether there's ever been a completed stretch. Drives the dashboard's
+    /// first-run empty state so a brand-new user sees an invitation, not a wall
+    /// of zeros.
+    var hasHistory: Bool {
+        todayCount > 0 || weeklyActiveDays > 0 || bestStreakDays > 0 || lastCompleted != nil
+    }
 }
