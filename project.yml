@@ -1,0 +1,107 @@
+name: StretchWatch
+options:
+  bundleIdPrefix: com.seungwon.stretchwatch
+  deploymentTarget:
+    iOS: "18.0"
+    watchOS: "10.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "6.0"
+    # Signing: set your team in Xcode (Signing & Capabilities) or here.
+    # DEVELOPMENT_TEAM: "XXXXXXXXXX"
+    CODE_SIGN_STYLE: Automatic
+    GENERATE_INFOPLIST_FILE: NO
+
+targets:
+  # ---------- iOS companion ----------
+  StretchWatch:
+    type: application
+    platform: iOS
+    sources:
+      - iOSApp
+      - Shared
+    dependencies:
+      - target: StretchWatch Watch App
+        embed: true
+    info:
+      path: iOSApp/Info.plist
+      properties:
+        CFBundleDisplayName: StretchWatch
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+    entitlements:
+      path: iOSApp/StretchWatch.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.seungwon.stretchwatch
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.seungwon.stretchwatch
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+
+  # ---------- watchOS app (single-target, watchOS 10+) ----------
+  StretchWatch Watch App:
+    type: application
+    platform: watchOS
+    sources:
+      - WatchApp
+      - Shared
+    dependencies:
+      - target: StretchWatch Complication
+        embed: true
+    info:
+      path: WatchApp/Info.plist
+      properties:
+        CFBundleDisplayName: StretchWatch
+        WKApplication: true
+        WKCompanionAppBundleIdentifier: com.seungwon.stretchwatch
+        NSMotionUsageDescription: "StretchWatch checks your recent movement to tell when you've been sitting a while, so it can remind you to stretch."
+    entitlements:
+      path: WatchApp/StretchWatchWatch.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.seungwon.stretchwatch
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.seungwon.stretchwatch.watchkitapp
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+
+  # ---------- unit tests (pure logic, iOS host) ----------
+  StretchWatchTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Tests
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.seungwon.stretchwatch.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+  # ---------- watch complication (WidgetKit extension) ----------
+  StretchWatch Complication:
+    type: app-extension
+    platform: watchOS
+    sources:
+      - Complication
+      - Shared
+    info:
+      path: Complication/Info.plist
+      properties:
+        CFBundleDisplayName: StretchWatch
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: Complication/StretchComplication.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.seungwon.stretchwatch
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.seungwon.stretchwatch.watchkitapp.complication

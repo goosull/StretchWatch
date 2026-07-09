@@ -1,0 +1,12 @@
+# Xcode / build
+StretchWatch.xcodeproj/
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+
+# macOS
+.DS_Store
+
+# Swift Package Manager
+.build/
