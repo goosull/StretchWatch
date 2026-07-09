@@ -55,6 +55,17 @@ actor StretchStore {
         let weekAgo = calendar.date(byAdding: .day, value: -6, to: today) ?? today
         let weeklyActiveDays = completedDays.filter { $0 >= weekAgo && $0 <= today }.count
 
+        // Per-day completion counts for the trailing 7 days, oldest first:
+        // index 0 = 6 days ago … index 6 = today. Feeds the iOS heatmap.
+        var weeklyCounts = [Int](repeating: 0, count: 7)
+        for event in completed {
+            let day = calendar.startOfDay(for: event.date)
+            if let diff = calendar.dateComponents([.day], from: day, to: today).day,
+               diff >= 0, diff <= 6 {
+                weeklyCounts[6 - diff] += 1
+            }
+        }
+
         // Lenient streak: walk back from today; today counting as 0 does NOT break
         // it (the day isn't over). A prior day with no completion ends the streak.
         var streak = 0
@@ -75,8 +86,21 @@ actor StretchStore {
         return StretchSnapshot(todayCount: todayCount,
                                streakDays: streak,
                                weeklyActiveDays: weeklyActiveDays,
+                               weeklyCounts: weeklyCounts,
                                lastCompleted: completed.map(\.date).max(),
                                updatedAt: now)
+    }
+
+    /// Stepped intensity bucket for a day's completion count, 0…3. A discrete
+    /// scale reads cleaner than a continuous gradient (and stays accessible with
+    /// a single-hue opacity ramp). The UI maps the level to an ember opacity.
+    static func heatLevel(_ count: Int) -> Int {
+        switch count {
+        case ..<1:  return 0
+        case 1:     return 1
+        case 2:     return 2
+        default:    return 3
+        }
     }
 
     private func load() -> [StretchEvent] {
@@ -95,6 +119,9 @@ struct StretchSnapshot: Codable, Sendable {
     var todayCount = 0
     var streakDays = 0
     var weeklyActiveDays = 0
+    /// Trailing 7 days of completion counts, oldest first ([6] = today). Empty on
+    /// decode of a pre-heatmap snapshot — the UI treats that as all-zero.
+    var weeklyCounts: [Int] = []
     var lastCompleted: Date?
     var updatedAt = Date()
 }
