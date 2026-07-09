@@ -136,7 +136,8 @@ enum TriggerEngine {
             nextFireDate = nil
             return
         }
-        let move = StretchLibrary.next(afterMoveId: lastMoveId, seed: seed)
+        let move = StretchLibrary.next(afterMoveId: lastMoveId, seed: seed,
+                                       enabledRegions: settings.activeRegions)
         let fire = settings.adjustedFire(from.addingTimeInterval(settings.interval))
         let sid = String(Int(fire.timeIntervalSince1970))
         currentMoveId = move.id

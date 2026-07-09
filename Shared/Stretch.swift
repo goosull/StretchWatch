@@ -6,6 +6,16 @@ import Foundation
 struct Stretch: Identifiable, Codable, Sendable, Equatable {
     enum Region: String, Codable, CaseIterable, Sendable {
         case neck, shoulder, wrist, back
+
+        /// Display name for the Settings focus toggles.
+        var title: String {
+            switch self {
+            case .neck:     return "Neck"
+            case .shoulder: return "Shoulders"
+            case .wrist:    return "Wrists"
+            case .back:     return "Back"
+            }
+        }
     }
 
     /// The direction the on-screen glyph sweeps, mirroring the movement.
@@ -54,17 +64,27 @@ enum StretchLibrary {
 
     /// Pick the next move: rotate to a *different region* than last, never repeat
     /// the exact last move. Deterministic given (lastMoveId, a rotation seed).
-    static func next(afterMoveId lastId: String?, seed: Int) -> Stretch {
-        let regions = Stretch.Region.allCases
+    /// `enabledRegions` restricts the pool to the body areas the user opted into;
+    /// nil or empty means all regions (we never leave the user with no stretch).
+    static func next(afterMoveId lastId: String?, seed: Int,
+                     enabledRegions: Set<Stretch.Region>? = nil) -> Stretch {
+        let enabled = enabledRegions.flatMap { $0.isEmpty ? nil : $0 }
+        let regions = Stretch.Region.allCases.filter { enabled?.contains($0) ?? true }
+        let activeRegions = regions.isEmpty ? Stretch.Region.allCases : regions
+
         let lastRegion = all.first(where: { $0.id == lastId })?.region
-        // Advance to the next region in rotation.
-        let startIndex = lastRegion.flatMap { regions.firstIndex(of: $0) }.map { $0 + 1 } ?? seed
-        for offset in 0..<regions.count {
-            let region = regions[(startIndex + offset) % regions.count]
+        // Advance to the next enabled region in rotation.
+        let startIndex = lastRegion.flatMap { activeRegions.firstIndex(of: $0) }.map { $0 + 1 } ?? seed
+        for offset in 0..<activeRegions.count {
+            let region = activeRegions[(startIndex + offset) % activeRegions.count]
             let candidates = all.filter { $0.region == region && $0.id != lastId }
             if let pick = candidates[safe: seed % max(1, candidates.count)] { return pick }
         }
-        return all[seed % all.count]
+        // Fallback: any enabled move, avoiding the immediate repeat when possible.
+        let pool = all.filter { activeRegions.contains($0.region) }
+        let avoidLast = pool.filter { $0.id != lastId }
+        let finalPool = avoidLast.isEmpty ? pool : avoidLast
+        return finalPool[seed % finalPool.count]
     }
 }
 

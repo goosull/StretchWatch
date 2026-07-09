@@ -163,4 +163,57 @@ final class StretchLogicTests: XCTestCase {
         let pick = StretchLibrary.next(afterMoveId: "neck-right", seed: 0)
         XCTAssertNotEqual(pick.region, .neck)
     }
+
+    // MARK: - Region focus filter
+
+    func testEnabledRegionsRestrictsToChosenAreas() {
+        for seed in 0..<30 {
+            let pick = StretchLibrary.next(afterMoveId: nil, seed: seed, enabledRegions: [.wrist])
+            XCTAssertEqual(pick.region, .wrist, "seed \(seed) leaked outside enabled regions")
+        }
+    }
+
+    func testEnabledRegionsTwoAreasStayInside() {
+        let allowed: Set<Stretch.Region> = [.neck, .back]
+        for seed in 0..<30 {
+            let pick = StretchLibrary.next(afterMoveId: "sh-roll", seed: seed, enabledRegions: allowed)
+            XCTAssertTrue(allowed.contains(pick.region))
+        }
+    }
+
+    func testEnabledRegionsNilOrEmptyMeansAll() {
+        // nil → all regions reachable; empty → treated as all (never zero moves).
+        let nilPick = StretchLibrary.next(afterMoveId: nil, seed: 3, enabledRegions: nil)
+        XCTAssertTrue(Stretch.Region.allCases.contains(nilPick.region))
+        let emptyPick = StretchLibrary.next(afterMoveId: nil, seed: 3, enabledRegions: [])
+        XCTAssertTrue(Stretch.Region.allCases.contains(emptyPick.region))
+    }
+
+    func testEnabledSingleRegionNoImmediateRepeat() {
+        // Even confined to one region, don't hand back the exact same move.
+        for seed in 0..<20 {
+            let pick = StretchLibrary.next(afterMoveId: "neck-right", seed: seed, enabledRegions: [.neck])
+            XCTAssertEqual(pick.region, .neck)
+            XCTAssertNotEqual(pick.id, "neck-right")
+        }
+    }
+
+    func testActiveRegionsDefaultsToAll() {
+        var s = StretchSettings()
+        XCTAssertEqual(s.activeRegions, Set(Stretch.Region.allCases))  // nil → all
+        s.enabledRegions = []
+        XCTAssertEqual(s.activeRegions, Set(Stretch.Region.allCases))  // empty → all
+        s.enabledRegions = [.wrist]
+        XCTAssertEqual(s.activeRegions, [.wrist])
+    }
+
+    func testSettingsDecodesWithoutEnabledRegions() throws {
+        // A settings blob saved before this feature (no enabledRegions key) must
+        // still decode — other fields must not reset.
+        let json = #"{"remindersOn":true,"intervalMinutes":30,"standingDesk":false,"quietEnabled":true,"quietStartHour":22,"quietEndHour":7}"#
+        let s = try JSONDecoder().decode(StretchSettings.self, from: Data(json.utf8))
+        XCTAssertEqual(s.intervalMinutes, 30)
+        XCTAssertNil(s.enabledRegions)
+        XCTAssertEqual(s.activeRegions, Set(Stretch.Region.allCases))
+    }
 }

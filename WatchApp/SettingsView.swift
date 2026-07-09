@@ -27,6 +27,17 @@ struct SettingsView: View {
                     Text("When on, we lean off movement detection — a standing desk looks the same as sitting to the sensors.")
                 }
 
+                Section {
+                    ForEach(Stretch.Region.allCases, id: \.self) { region in
+                        Toggle(region.title, isOn: regionBinding(region))
+                            .tint(Theme.ember)
+                    }
+                } header: {
+                    Text("Focus")
+                } footer: {
+                    Text("Which areas to stretch. At least one stays on.")
+                }
+
                 Section("Quiet hours") {
                     Toggle("Silence overnight", isOn: $settings.quietEnabled)
                         .tint(Theme.ember)
@@ -52,6 +63,20 @@ struct SettingsView: View {
             Task { await TriggerEngine.settingsChanged() }
         }
         .sheet(isPresented: $showDiagnostics) { SpikeView() }
+    }
+
+    /// Toggle for one region. Blocks turning off the last enabled area so the
+    /// user can never end up with zero stretches.
+    private func regionBinding(_ region: Stretch.Region) -> Binding<Bool> {
+        Binding(
+            get: { settings.activeRegions.contains(region) },
+            set: { isOn in
+                var set = settings.activeRegions
+                if isOn { set.insert(region) }
+                else if set.count > 1 { set.remove(region) }  // keep at least one
+                settings.enabledRegions = set
+            }
+        )
     }
 
     private func hourLabel(_ h: Int) -> String {
