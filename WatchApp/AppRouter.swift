@@ -16,9 +16,11 @@ final class AppRouter: ObservableObject {
         activeStretch = StretchLibrary.all.first { $0.id == moveId } ?? TriggerEngine.currentStretch
     }
 
-    /// Start a stretch immediately, unprompted.
+    /// Start a stretch immediately, unprompted. Respects the user's focus regions
+    /// so an ad-hoc stretch never picks a body area they turned off.
     func startNow() {
-        let move = StretchLibrary.next(afterMoveId: nil, seed: Int(Date().timeIntervalSince1970))
+        let move = StretchLibrary.next(afterMoveId: nil, seed: Int(Date().timeIntervalSince1970),
+                                       enabledRegions: SettingsStore.load().activeRegions)
         activeSessionId = "adhoc-\(Int(Date().timeIntervalSince1970))"
         activeStretch = move
     }

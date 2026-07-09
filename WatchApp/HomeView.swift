@@ -14,6 +14,7 @@ struct HomeView: View {
         NavigationStack { rootContent }
             .fullScreenCover(item: $router.activeStretch) { stretch in
                 StretchSessionView(stretch: stretch,
+                                   snapshotBefore: snapshot,
                                    onComplete: { router.complete() },
                                    onSkip: { router.skip() })
             }

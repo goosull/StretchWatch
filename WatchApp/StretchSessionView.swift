@@ -7,6 +7,9 @@ import WatchKit
 /// false-skip failure mode where the wrist drops mid-stretch (per the review).
 struct StretchSessionView: View {
     let stretch: Stretch
+    /// The snapshot as it was when the session opened, used to project whether
+    /// finishing lands on a milestone. Defaults to empty (no milestone).
+    var snapshotBefore: StretchSnapshot = StretchSnapshot()
     var onComplete: () -> Void = {}
     var onSkip: () -> Void = {}
 
@@ -139,7 +142,9 @@ struct StretchSessionView: View {
 
     private func finish() {
         outcomeSent = true
-        WKInterfaceDevice.current().play(.success)
+        // A milestone gets a distinct notification buzz so it feels different
+        // from an ordinary finish; otherwise the usual success tap.
+        WKInterfaceDevice.current().play(milestoneLine == nil ? .success : .notification)
         withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
             phase = .done; bloom = true
         }
@@ -152,9 +157,16 @@ struct StretchSessionView: View {
         onSkip()
     }
 
+    /// A milestone line for finishing this session, computed once from the
+    /// pre-session snapshot, or nil on an ordinary finish.
+    private var milestoneLine: String? {
+        StretchMilestone.line(afterCompleting: snapshotBefore)
+    }
+
     private var rewardLine: String {
-        ["Nice.", "That's one.", "Your neck thanks you.", "Well eased."]
-            .randomElement() ?? "Nice."
+        milestoneLine
+            ?? (["Nice.", "That's one.", "Your neck thanks you.", "Well eased."]
+                .randomElement() ?? "Nice.")
     }
 }
 
