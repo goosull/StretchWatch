@@ -62,11 +62,14 @@ targets:
         WKApplication: true
         WKCompanionAppBundleIdentifier: com.seungwon.stretchwatch
         NSMotionUsageDescription: "StretchWatch checks your recent movement to tell when you've been sitting a while, so it can remind you to stretch."
+        NSHealthUpdateUsageDescription: "StretchWatch can log each completed stretch as mindful minutes in Apple Health, if you turn it on in Settings."
     entitlements:
       path: WatchApp/StretchWatchWatch.entitlements
       properties:
         com.apple.security.application-groups:
           - group.com.seungwon.stretchwatch
+        com.apple.developer.healthkit: true
+        com.apple.developer.healthkit.access: []
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.seungwon.stretchwatch.watchkitapp

@@ -53,14 +53,25 @@ struct SettingsView: View {
             }
 
             Section {
+                Toggle("Log to Apple Health", isOn: $settings.logToHealth)
+                    .tint(Theme.ember)
+            } footer: {
+                Text("Records each stretch as mindful minutes in Health.")
+            }
+
+            Section {
                 Button("Spike #1 data") { showDiagnostics = true }
                     .foregroundStyle(Theme.haze)
             }
         }
         .navigationTitle("Settings")
-        .onChange(of: settings) { _, new in
+        .onChange(of: settings) { old, new in
             SettingsStore.save(new)
             Task { await TriggerEngine.settingsChanged() }
+            // Ask for Health permission the moment the user opts in.
+            if new.logToHealth, !old.logToHealth {
+                Task { await HealthLogger.requestAuthorization() }
+            }
         }
         .sheet(isPresented: $showDiagnostics) { SpikeView() }
     }

@@ -111,6 +111,11 @@ enum TriggerEngine {
 
     static func complete(sessionId sid: String, moveId: String) async {
         await StretchStore.shared.record(.init(sessionId: sid, date: Date(), outcome: .completed, moveId: moveId))
+        // Opt-in: mirror the stretch into Apple Health as a mindful session.
+        if SettingsStore.load().logToHealth {
+            let seconds = StretchLibrary.all.first { $0.id == moveId }?.seconds ?? 30
+            await HealthLogger.logMindfulSession(seconds: seconds)
+        }
         await refreshSnapshot()
         await armNext()                        // refractory: next reminder from now
     }
