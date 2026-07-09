@@ -11,10 +11,20 @@ struct StretchSettings: Codable, Sendable, Equatable {
     var quietEnabled = true
     var quietStartHour = 22   // 10pm
     var quietEndHour = 7      // 7am
+    /// Body areas the user wants reminders for. Optional so a settings blob saved
+    /// before this feature still decodes (missing key → nil → treated as all).
+    var enabledRegions: Set<Stretch.Region>? = nil
 
     static let intervalChoices = [20, 30, 40, 50, 60]
 
     var interval: TimeInterval { TimeInterval(intervalMinutes * 60) }
+
+    /// The regions to actually rotate through — never empty, so the user always
+    /// gets a stretch even if they somehow cleared the set.
+    var activeRegions: Set<Stretch.Region> {
+        let e = enabledRegions ?? Set(Stretch.Region.allCases)
+        return e.isEmpty ? Set(Stretch.Region.allCases) : e
+    }
 
     /// Is `date` inside the quiet window? Handles windows that cross midnight.
     func isQuiet(_ date: Date, calendar: Calendar = .current) -> Bool {
