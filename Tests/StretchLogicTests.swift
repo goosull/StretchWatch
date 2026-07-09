@@ -106,6 +106,49 @@ final class StretchLogicTests: XCTestCase {
         XCTAssertEqual(StretchStore.snapshot(from: events, calendar: cal, now: now).todayCount, 2)
     }
 
+    // MARK: - Weekly heatmap (per-day counts)
+
+    func testWeeklyCountsPerDayOldestFirst() {
+        let now = date(2026, 7, 8, 15)  // today = Jul 8
+        let events = [
+            completed(date(2026, 7, 8, 9)),   // today ×2
+            completed(date(2026, 7, 8, 11)),
+            completed(date(2026, 7, 7, 10)),  // yesterday ×1
+            completed(date(2026, 7, 2, 10)),  // 6 days ago ×1 (boundary, included)
+            completed(date(2026, 7, 1, 10)),  // 7 days ago (excluded)
+        ]
+        let counts = StretchStore.snapshot(from: events, calendar: cal, now: now).weeklyCounts
+        XCTAssertEqual(counts.count, 7)
+        XCTAssertEqual(counts[6], 2)  // today
+        XCTAssertEqual(counts[5], 1)  // yesterday
+        XCTAssertEqual(counts[0], 1)  // 6 days ago (Jul 2)
+        XCTAssertEqual(counts[1], 0)  // Jul 3, empty
+        XCTAssertEqual(counts.reduce(0, +), 4)  // Jul 1 excluded
+    }
+
+    func testWeeklyCountsOnlyCompleted() {
+        let now = date(2026, 7, 8, 15)
+        let events = [
+            completed(date(2026, 7, 8, 9)),
+            StretchEvent(sessionId: "s", date: date(2026, 7, 8, 10), outcome: .skipped, moveId: "a"),
+            StretchEvent(sessionId: "s2", date: date(2026, 7, 8, 10), outcome: .scheduled, moveId: "a"),
+        ]
+        XCTAssertEqual(StretchStore.snapshot(from: events, calendar: cal, now: now).weeklyCounts[6], 1)
+    }
+
+    func testWeeklyCountsEmptyWhenNoEvents() {
+        let snap = StretchStore.snapshot(from: [], calendar: cal, now: date(2026, 7, 8, 15))
+        XCTAssertEqual(snap.weeklyCounts, [0, 0, 0, 0, 0, 0, 0])
+    }
+
+    func testHeatLevelBuckets() {
+        XCTAssertEqual(StretchStore.heatLevel(0), 0)
+        XCTAssertEqual(StretchStore.heatLevel(1), 1)
+        XCTAssertEqual(StretchStore.heatLevel(2), 2)
+        XCTAssertEqual(StretchStore.heatLevel(3), 3)
+        XCTAssertEqual(StretchStore.heatLevel(9), 3)  // saturates at 3+
+    }
+
     // MARK: - Move selection
 
     func testMoveSelectionNoImmediateRepeat() {
