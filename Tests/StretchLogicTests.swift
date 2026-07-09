@@ -288,12 +288,28 @@ final class StretchLogicTests: XCTestCase {
     }
 
     func testSettingsDecodesWithoutEnabledRegions() throws {
-        // A settings blob saved before this feature (no enabledRegions key) must
-        // still decode — other fields must not reset.
+        // A settings blob saved before these features (no enabledRegions, no
+        // logToHealth) must still decode — other fields must not reset.
         let json = #"{"remindersOn":true,"intervalMinutes":30,"standingDesk":false,"quietEnabled":true,"quietStartHour":22,"quietEndHour":7}"#
         let s = try JSONDecoder().decode(StretchSettings.self, from: Data(json.utf8))
-        XCTAssertEqual(s.intervalMinutes, 30)
+        XCTAssertEqual(s.intervalMinutes, 30)     // preserved, not reset to default 40
         XCTAssertNil(s.enabledRegions)
         XCTAssertEqual(s.activeRegions, Set(Stretch.Region.allCases))
+        XCTAssertFalse(s.logToHealth)             // missing key → default
+    }
+
+    func testSettingsTolerantDecoderKeepsAllPresentFields() throws {
+        // Round-trip: encode then decode preserves every field, incl. new ones.
+        var s = StretchSettings()
+        s.intervalMinutes = 20; s.quietEnabled = false; s.enabledRegions = [.wrist]; s.logToHealth = true
+        let data = try JSONEncoder().encode(s)
+        let back = try JSONDecoder().decode(StretchSettings.self, from: data)
+        XCTAssertEqual(back, s)
+    }
+
+    func testSettingsEmptyObjectDecodesToDefaults() throws {
+        // A totally empty object must yield defaults, not throw.
+        let s = try JSONDecoder().decode(StretchSettings.self, from: Data("{}".utf8))
+        XCTAssertEqual(s, StretchSettings())
     }
 }

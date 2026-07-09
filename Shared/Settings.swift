@@ -14,6 +14,8 @@ struct StretchSettings: Codable, Sendable, Equatable {
     /// Body areas the user wants reminders for. Optional so a settings blob saved
     /// before this feature still decodes (missing key → nil → treated as all).
     var enabledRegions: Set<Stretch.Region>? = nil
+    /// Mirror completed stretches into Apple Health as mindful minutes. Opt-in.
+    var logToHealth = false
 
     static let intervalChoices = [20, 30, 40, 50, 60]
 
@@ -43,6 +45,26 @@ struct StretchSettings: Codable, Sendable, Equatable {
         var end = calendar.date(from: comps) ?? fire
         if end <= fire { end = calendar.date(byAdding: .day, value: 1, to: end) ?? fire }
         return end
+    }
+}
+
+extension StretchSettings {
+    /// Tolerant decoder: every field falls back to its default when the key is
+    /// absent, so adding a new setting never resets a user's saved preferences on
+    /// upgrade (Swift's synthesized decoder would otherwise throw on a missing
+    /// key). Declared in an extension so the memberwise initializer is preserved.
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        var s = StretchSettings()
+        s.remindersOn    = try c.decodeIfPresent(Bool.self, forKey: .remindersOn) ?? s.remindersOn
+        s.intervalMinutes = try c.decodeIfPresent(Int.self, forKey: .intervalMinutes) ?? s.intervalMinutes
+        s.standingDesk   = try c.decodeIfPresent(Bool.self, forKey: .standingDesk) ?? s.standingDesk
+        s.quietEnabled   = try c.decodeIfPresent(Bool.self, forKey: .quietEnabled) ?? s.quietEnabled
+        s.quietStartHour = try c.decodeIfPresent(Int.self, forKey: .quietStartHour) ?? s.quietStartHour
+        s.quietEndHour   = try c.decodeIfPresent(Int.self, forKey: .quietEndHour) ?? s.quietEndHour
+        s.enabledRegions = try c.decodeIfPresent(Set<Stretch.Region>.self, forKey: .enabledRegions) ?? s.enabledRegions
+        s.logToHealth    = try c.decodeIfPresent(Bool.self, forKey: .logToHealth) ?? s.logToHealth
+        self = s
     }
 }
 
