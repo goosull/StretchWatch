@@ -83,10 +83,27 @@ actor StretchStore {
             if streak > 400 { break }  // backstop
         }
 
+        // Best ever: the longest run of consecutive completed days across all
+        // history. Reflective, never punitive — a personal record to return to.
+        var bestStreak = 0
+        if !completedDays.isEmpty {
+            let sorted = completedDays.sorted()
+            var run = 1
+            bestStreak = 1
+            for i in 1..<sorted.count {
+                let prevPlusOne = calendar.date(byAdding: .day, value: 1, to: sorted[i - 1])
+                run = (prevPlusOne == sorted[i]) ? run + 1 : 1
+                bestStreak = max(bestStreak, run)
+            }
+        }
+        // The in-progress streak is always a real run, so best is never below it.
+        bestStreak = max(bestStreak, streak)
+
         return StretchSnapshot(todayCount: todayCount,
                                streakDays: streak,
                                weeklyActiveDays: weeklyActiveDays,
                                weeklyCounts: weeklyCounts,
+                               bestStreakDays: bestStreak,
                                lastCompleted: completed.map(\.date).max(),
                                updatedAt: now)
     }
@@ -122,6 +139,9 @@ struct StretchSnapshot: Codable, Sendable {
     /// Trailing 7 days of completion counts, oldest first ([6] = today). Empty on
     /// decode of a pre-heatmap snapshot — the UI treats that as all-zero.
     var weeklyCounts: [Int] = []
+    /// Longest-ever run of consecutive active days. Defaults to 0 for a snapshot
+    /// saved before this field existed.
+    var bestStreakDays = 0
     var lastCompleted: Date?
     var updatedAt = Date()
 }

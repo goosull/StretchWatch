@@ -106,6 +106,48 @@ final class StretchLogicTests: XCTestCase {
         XCTAssertEqual(StretchStore.snapshot(from: events, calendar: cal, now: now).todayCount, 2)
     }
 
+    // MARK: - Best rhythm (longest-ever streak)
+
+    func testBestStreakLongestRunAcrossHistory() {
+        let now = date(2026, 7, 8, 15)
+        let events = [
+            // A 4-day run in June (the record)
+            completed(date(2026, 6, 1)), completed(date(2026, 6, 2)),
+            completed(date(2026, 6, 3)), completed(date(2026, 6, 4)),
+            // A shorter recent 2-day run
+            completed(date(2026, 7, 7)), completed(date(2026, 7, 8)),
+        ]
+        XCTAssertEqual(StretchStore.snapshot(from: events, calendar: cal, now: now).bestStreakDays, 4)
+    }
+
+    func testBestStreakSingleDay() {
+        let now = date(2026, 7, 8, 15)
+        let events = [completed(date(2026, 7, 3))]
+        XCTAssertEqual(StretchStore.snapshot(from: events, calendar: cal, now: now).bestStreakDays, 1)
+    }
+
+    func testBestStreakNoEventsIsZero() {
+        XCTAssertEqual(StretchStore.snapshot(from: [], calendar: cal, now: date(2026, 7, 8)).bestStreakDays, 0)
+    }
+
+    func testBestStreakNeverBelowCurrentStreak() {
+        let now = date(2026, 7, 8, 15)
+        // Current 3-day run ending today is also the best.
+        let events = [completed(date(2026, 7, 8)), completed(date(2026, 7, 7)), completed(date(2026, 7, 6))]
+        let snap = StretchStore.snapshot(from: events, calendar: cal, now: now)
+        XCTAssertEqual(snap.streakDays, 3)
+        XCTAssertGreaterThanOrEqual(snap.bestStreakDays, snap.streakDays)
+        XCTAssertEqual(snap.bestStreakDays, 3)
+    }
+
+    func testBestStreakIgnoresSameDayDuplicates() {
+        let now = date(2026, 7, 8, 15)
+        // Two completions same day shouldn't inflate the run.
+        let events = [completed(date(2026, 7, 1, 9)), completed(date(2026, 7, 1, 18)),
+                      completed(date(2026, 7, 2, 9))]
+        XCTAssertEqual(StretchStore.snapshot(from: events, calendar: cal, now: now).bestStreakDays, 2)
+    }
+
     // MARK: - Weekly heatmap (per-day counts)
 
     func testWeeklyCountsPerDayOldestFirst() {

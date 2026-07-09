@@ -10,7 +10,7 @@ struct StretchWatchApp: App {
         if CommandLine.arguments.contains("-previewData") {
             PhoneSync.shared.snapshot = StretchSnapshot(
                 todayCount: 3, streakDays: 4, weeklyActiveDays: 5,
-                weeklyCounts: [0, 2, 1, 3, 0, 1, 3],
+                weeklyCounts: [0, 2, 1, 3, 0, 1, 3], bestStreakDays: 12,
                 lastCompleted: Date(), updatedAt: Date())
         }
         PhoneSync.shared.activate()
