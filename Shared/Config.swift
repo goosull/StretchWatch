@@ -4,6 +4,7 @@ import Foundation
 /// product agree. Drop `interval` temporarily (e.g. 3*60) to collect data fast.
 enum StretchConfig {
     static let interval: TimeInterval = 40 * 60        // cadence between nudges
+    static let snoozeInterval: TimeInterval = 10 * 60  // "Later" pushes the nudge out this far
     static let wakeLead: TimeInterval = 8 * 60         // wake this far before a fire
     static let pedometerWindow: TimeInterval = 40 * 60 // trailing movement window
     static let minRefreshLead: TimeInterval = 5 * 60   // watchOS refresh floor
@@ -14,6 +15,7 @@ enum StretchConfig {
     static let notifCategory = "STRETCH"
     static let actionComplete = "STRETCH_DONE"
     static let actionSkip = "STRETCH_SKIP"
+    static let actionSnooze = "STRETCH_SNOOZE"
 
     // App Group defaults keys
     static let kNextFire = "trigger.nextFireDate"

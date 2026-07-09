@@ -56,6 +56,8 @@ final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate, @u
         switch response.actionIdentifier {
         case StretchConfig.actionComplete:
             await TriggerEngine.complete(sessionId: sid, moveId: moveId)
+        case StretchConfig.actionSnooze:
+            await TriggerEngine.snooze(sessionId: sid, moveId: moveId)
         case StretchConfig.actionSkip:
             await TriggerEngine.skip(sessionId: sid, moveId: moveId)
         default:
