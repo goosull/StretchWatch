@@ -88,6 +88,39 @@ enum StretchLibrary {
     }
 }
 
+/// Gentle milestone moments. Pure so the celebratory line is unit-testable and
+/// the session view stays dumb. Calm, text-only (no confetti) — a milestone is a
+/// warmer word, not a trophy, in keeping with the anti-Stand tone.
+enum StretchMilestone {
+    static let streakMarks: Set<Int> = [3, 7, 14, 30, 50, 100, 200, 365]
+    static let todayMarks: Set<Int> = [5, 10]
+
+    /// The (today, streak) numbers *after* the just-recorded completion, projected
+    /// from the pre-completion snapshot summary. Doing today's first stretch extends
+    /// the streak by one; a later same-day stretch leaves the streak unchanged
+    /// (the snapshot already counts today once it has any completion).
+    static func project(from snap: StretchSnapshot) -> (today: Int, streak: Int) {
+        let today = snap.todayCount + 1
+        let streak = snap.todayCount == 0 ? snap.streakDays + 1 : snap.streakDays
+        return (today, streak)
+    }
+
+    /// A gentle line if this completion lands on a milestone, else nil. A streak
+    /// milestone outranks the same-day count when both land at once.
+    static func line(streakDays: Int, todayCount: Int) -> String? {
+        if streakMarks.contains(streakDays) { return "A \(streakDays)-day rhythm." }
+        if todayMarks.contains(todayCount)  { return "\(todayCount) today. Lovely." }
+        return nil
+    }
+
+    /// Convenience: the milestone line for completing a stretch given the
+    /// pre-completion snapshot, or nil.
+    static func line(afterCompleting snap: StretchSnapshot) -> String? {
+        let p = project(from: snap)
+        return line(streakDays: p.streak, todayCount: p.today)
+    }
+}
+
 extension Array {
     subscript(safe index: Int) -> Element? {
         indices.contains(index) ? self[index] : nil
