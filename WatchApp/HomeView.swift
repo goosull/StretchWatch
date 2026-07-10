@@ -10,8 +10,21 @@ struct HomeView: View {
     @State private var minutesToNext: Int?
     @State private var authStatus: UNAuthorizationStatus = .notDetermined
 
+    /// Scales the home text with the wearer's text-size setting (1.0 at default).
+    /// Capped tighter than iOS — the watch is small — with minimumScaleFactor on
+    /// the big count as a backstop so nothing overflows the face.
+    @ScaledMetric private var typeScale: CGFloat = 1
+
     var body: some View {
         NavigationStack { rootContent }
+            // Cap below the accessibility sizes: the watch face is too small to
+            // hold them without overflow. The count also shrinks-to-fit as a backstop.
+            .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+            // Dev-only: force a large size for screenshots (the watch sim can't set
+            // content_size). Applied outside the cap so the cap still clamps it.
+            .transformEnvironment(\.dynamicTypeSize) {
+                if CommandLine.arguments.contains("-previewLargeText") { $0 = .accessibility5 }
+            }
             .fullScreenCover(item: $router.activeStretch) { stretch in
                 StretchSessionView(stretch: stretch,
                                    snapshotBefore: snapshot,
@@ -69,7 +82,7 @@ struct HomeView: View {
     private var home: some View {
         VStack(spacing: 10) {
             Text("STRETCHWATCH")
-                .font(Theme.display(10, .medium)).tracking(1.5)
+                .font(Theme.display(10 * typeScale, .medium)).tracking(1.5)
                 .foregroundStyle(Theme.haze)
 
             if snapshot.hasHistory { reflection } else { firstRun }
@@ -80,7 +93,7 @@ struct HomeView: View {
                 WatchWeekStrip(counts: snapshot.weeklyCounts)
                 if snapshot.streakDays > 1 {
                     Text("\(snapshot.streakDays)-day rhythm")
-                        .font(Theme.display(11, .regular)).foregroundStyle(Theme.calm)
+                        .font(Theme.display(11 * typeScale, .regular)).foregroundStyle(Theme.calm)
                 }
             }
         }
@@ -92,17 +105,18 @@ struct HomeView: View {
         VStack(spacing: 6) {
             VStack(spacing: 0) {
                 Text("\(snapshot.todayCount)")
-                    .font(Theme.display(46, .semibold)).monospacedDigit()
+                    .font(Theme.display(46 * typeScale, .semibold)).monospacedDigit()
                     .foregroundStyle(Theme.ember)
                     .contentTransition(.numericText())
+                    .lineLimit(1).minimumScaleFactor(0.6)  // never overflow the face
                 Text("eased today")
-                    .font(Theme.display(12, .regular)).foregroundStyle(Theme.haze)
+                    .font(Theme.display(12 * typeScale, .regular)).foregroundStyle(Theme.haze)
             }
             .accessibilityElement(children: .combine)
             .accessibilityLabel("\(snapshot.todayCount) eased today")
 
             Text(nextLine)
-                .font(Theme.display(12, .regular)).foregroundStyle(Theme.haze)
+                .font(Theme.display(12 * typeScale, .regular)).foregroundStyle(Theme.haze)
         }
     }
 
@@ -110,9 +124,10 @@ struct HomeView: View {
     private var firstRun: some View {
         VStack(spacing: 3) {
             Text("Ready when you are")
-                .font(Theme.display(18, .semibold)).foregroundStyle(Theme.paper)
+                .font(Theme.display(18 * typeScale, .semibold)).foregroundStyle(Theme.paper)
+                .multilineTextAlignment(.center).minimumScaleFactor(0.7)
             Text(nextLine == "no reminder set" ? "Your first ease starts here." : nextLine)
-                .font(Theme.display(11, .regular)).foregroundStyle(Theme.haze)
+                .font(Theme.display(11 * typeScale, .regular)).foregroundStyle(Theme.haze)
                 .multilineTextAlignment(.center)
         }
         .accessibilityElement(children: .combine)
@@ -122,7 +137,8 @@ struct HomeView: View {
     private var stretchButton: some View {
         Button(action: { router.startNow() }) {
             Text("Stretch now")
-                .font(Theme.display(15, .semibold))
+                .font(Theme.display(15 * typeScale, .semibold))
+                .lineLimit(1).minimumScaleFactor(0.7)
                 .frame(maxWidth: .infinity).padding(.vertical, 4)
         }
         .tint(Theme.ember)
@@ -137,20 +153,20 @@ struct HomeView: View {
                     .font(.system(size: 30, design: .rounded)).foregroundStyle(Theme.ember)
                     .padding(.top, 2)
                 Text("Ease up, seated")
-                    .font(Theme.display(17, .semibold)).foregroundStyle(Theme.paper)
+                    .font(Theme.display(17 * typeScale, .semibold)).foregroundStyle(Theme.paper)
                     .fixedSize(horizontal: false, vertical: true)
                 Text("A gentle nudge to stretch when you've sat a while. No standing.")
-                    .font(Theme.display(11, .regular)).foregroundStyle(Theme.haze)
+                    .font(Theme.display(11 * typeScale, .regular)).foregroundStyle(Theme.haze)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
                 Button(action: enable) {
                     Text("Turn on reminders")
-                        .font(Theme.display(14, .semibold))
+                        .font(Theme.display(14 * typeScale, .semibold))
                         .frame(maxWidth: .infinity).padding(.vertical, 3)
                 }
                 .tint(Theme.ember).padding(.top, 2)
                 Button("Just stretch now") { router.startNow() }
-                    .font(Theme.display(11, .regular)).buttonStyle(.plain)
+                    .font(Theme.display(11 * typeScale, .regular)).buttonStyle(.plain)
                     .foregroundStyle(Theme.haze)
             }
             .padding(.horizontal, 8)
@@ -164,12 +180,12 @@ struct HomeView: View {
             Image(systemName: "bell.slash")
                 .font(.system(size: 28, design: .rounded)).foregroundStyle(Theme.haze)
             Text("Reminders are off")
-                .font(Theme.display(15, .semibold)).foregroundStyle(Theme.paper)
+                .font(Theme.display(15 * typeScale, .semibold)).foregroundStyle(Theme.paper)
             Text("Turn them on in the Watch Settings › Notifications › StretchWatch.")
-                .font(Theme.display(11, .regular)).foregroundStyle(Theme.haze)
+                .font(Theme.display(11 * typeScale, .regular)).foregroundStyle(Theme.haze)
                 .multilineTextAlignment(.center)
             Button(action: { router.startNow() }) {
-                Text("Stretch now").font(Theme.display(14, .semibold))
+                Text("Stretch now").font(Theme.display(14 * typeScale, .semibold))
                     .frame(maxWidth: .infinity).padding(.vertical, 3)
             }
             .tint(Theme.ember)
