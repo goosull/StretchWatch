@@ -8,6 +8,11 @@ struct ContentView: View {
 
     private var snap: StretchSnapshot { sync.snapshot }
 
+    /// One knob scales every dashboard text with the reader's Dynamic Type
+    /// setting (1.0 at the default size). The whole screen grows together; the
+    /// `dynamicTypeSize` cap keeps the largest sizes from breaking the layout.
+    @ScaledMetric private var typeScale: CGFloat = 1
+
     var body: some View {
         ZStack {
             Theme.ink.ignoresSafeArea()
@@ -28,13 +33,14 @@ struct ContentView: View {
             .padding(.horizontal, 24)
             .padding(.top, 40)
         }
+        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
     }
 
     private var header: some View {
         HStack {
             Image(systemName: "figure.cooldown").foregroundStyle(Theme.ember)
             Text("StretchWatch")
-                .font(Theme.display(20, .semibold)).foregroundStyle(Theme.paper)
+                .font(Theme.display(20 * typeScale, .semibold)).foregroundStyle(Theme.paper)
             Spacer()
         }
     }
@@ -45,12 +51,12 @@ struct ContentView: View {
     private var emptyState: some View {
         VStack(spacing: 10) {
             Image(systemName: "figure.cooldown")
-                .font(.system(size: 40, design: .rounded))
+                .font(.system(size: 40 * typeScale, design: .rounded))
                 .foregroundStyle(Theme.ember.opacity(0.9))
             Text("Nothing to mirror yet")
-                .font(Theme.display(20, .semibold)).foregroundStyle(Theme.paper)
+                .font(Theme.display(20 * typeScale, .semibold)).foregroundStyle(Theme.paper)
             Text("Your first ease will show up here.\nStretch on the watch to begin.")
-                .font(Theme.display(13, .regular)).foregroundStyle(Theme.haze)
+                .font(Theme.display(13 * typeScale, .regular)).foregroundStyle(Theme.haze)
                 .multilineTextAlignment(.center)
         }
         .accessibilityElement(children: .combine)
@@ -60,11 +66,11 @@ struct ContentView: View {
     private var todayHero: some View {
         VStack(spacing: 2) {
             Text("\(snap.todayCount)")
-                .font(Theme.display(72, .bold)).monospacedDigit()
+                .font(Theme.display(72 * typeScale, .bold)).monospacedDigit()
                 .foregroundStyle(Theme.ember)
                 .contentTransition(.numericText())
             Text("eased today")
-                .font(Theme.display(15, .regular)).foregroundStyle(Theme.haze)
+                .font(Theme.display(15 * typeScale, .regular)).foregroundStyle(Theme.haze)
         }
     }
 
@@ -86,7 +92,7 @@ struct ContentView: View {
                 // date, not wall-clock, so labels never drift from the counts.)
             }
             Text("\(weeklyCounts.filter { $0 > 0 }.count) of 7 days this week")
-                .font(Theme.display(13, .regular)).foregroundStyle(Theme.haze)
+                .font(Theme.display(13 * typeScale, .regular)).foregroundStyle(Theme.haze)
         }
     }
 
@@ -107,18 +113,18 @@ struct ContentView: View {
         VStack(spacing: 2) {
             if snap.streakDays > 1 {
                 Text("\(snap.streakDays)-day rhythm")
-                    .font(Theme.display(14, .medium)).foregroundStyle(Theme.calm)
+                    .font(Theme.display(14 * typeScale, .medium)).foregroundStyle(Theme.calm)
             }
             if snap.bestStreakDays > 1, snap.bestStreakDays > snap.streakDays {
                 Text("best: \(snap.bestStreakDays) days")
-                    .font(Theme.display(11, .regular)).foregroundStyle(Theme.haze)
+                    .font(Theme.display(11 * typeScale, .regular)).foregroundStyle(Theme.haze)
             }
         }
     }
 
     private var footer: some View {
         Text("Do your stretches on the watch.\nThis is just the mirror.")
-            .font(Theme.display(12, .regular)).foregroundStyle(Theme.haze.opacity(0.7))
+            .font(Theme.display(12 * typeScale, .regular)).foregroundStyle(Theme.haze.opacity(0.7))
             .multilineTextAlignment(.center)
             .padding(.bottom, 16)
     }
