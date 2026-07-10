@@ -125,6 +125,12 @@ enum TriggerEngine {
         await armNext()
     }
 
+    /// "Later": defer the nudge without marking it done or skipped — re-arm sooner
+    /// (snoozeInterval) instead of the full cadence, so a busy moment isn't a miss.
+    static func snooze(sessionId sid: String, moveId: String) async {
+        await armNext(interval: StretchConfig.snoozeInterval)
+    }
+
     // MARK: - Scheduling (rolling one-shot)
 
     /// Re-arm after the user changes settings (interval, quiet hours, on/off).
@@ -133,7 +139,7 @@ enum TriggerEngine {
         await refreshSnapshot()
     }
 
-    static func armNext(from: Date = Date()) async {
+    static func armNext(from: Date = Date(), interval: TimeInterval? = nil) async {
         let settings = SettingsStore.load()
         guard settings.remindersOn else {
             UNUserNotificationCenter.current()
@@ -143,7 +149,8 @@ enum TriggerEngine {
         }
         let move = StretchLibrary.next(afterMoveId: lastMoveId, seed: seed,
                                        enabledRegions: settings.activeRegions)
-        let fire = settings.adjustedFire(from.addingTimeInterval(settings.interval))
+        // `interval` overrides the cadence (used by snooze); otherwise the setting.
+        let fire = settings.adjustedFire(from.addingTimeInterval(interval ?? settings.interval))
         let sid = String(Int(fire.timeIntervalSince1970))
         currentMoveId = move.id
         sessionId = sid
@@ -195,10 +202,12 @@ enum TriggerEngine {
     private static func registerCategory() {
         let done = UNNotificationAction(identifier: StretchConfig.actionComplete,
                                         title: "Did it", options: [])
+        let snooze = UNNotificationAction(identifier: StretchConfig.actionSnooze,
+                                          title: "Later", options: [])
         let skip = UNNotificationAction(identifier: StretchConfig.actionSkip,
                                         title: "Not now", options: [])
         let category = UNNotificationCategory(identifier: StretchConfig.notifCategory,
-                                              actions: [done, skip], intentIdentifiers: [],
+                                              actions: [done, snooze, skip], intentIdentifiers: [],
                                               options: [])
         UNUserNotificationCenter.current().setNotificationCategories([category])
     }

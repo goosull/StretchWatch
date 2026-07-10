@@ -50,6 +50,17 @@ final class StretchLogicTests: XCTestCase {
         XCTAssertEqual(s.adjustedFire(fire, calendar: cal), fire)
     }
 
+    func testSnoozeArmsSoonerThanFullCadence() {
+        // "Later" defers by snoozeInterval, which must be shorter than the normal
+        // cadence, so the re-armed fire is earlier than a full-interval arm.
+        XCTAssertLessThan(StretchConfig.snoozeInterval, StretchConfig.interval)
+        let s = StretchSettings()
+        let now = date(2026, 7, 8, 14)  // daytime, no quiet adjustment
+        let normal = s.adjustedFire(now.addingTimeInterval(StretchConfig.interval), calendar: cal)
+        let snoozed = s.adjustedFire(now.addingTimeInterval(StretchConfig.snoozeInterval), calendar: cal)
+        XCTAssertLessThan(snoozed, normal)
+    }
+
     // MARK: - Snapshot (today / streak / weekly)
 
     private func completed(_ date: Date) -> StretchEvent {
