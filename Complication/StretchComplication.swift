@@ -115,15 +115,18 @@ struct StretchComplicationView: View {
     }
 
     private var rectSubtitle: String {
-        if entry.streakDays > 1 { return "\(entry.streakDays)-day rhythm · \(inlineText.lowercased())" }
+        // Localize the streak part; drop .lowercased() (meaningless for Korean).
+        if entry.streakDays > 1 {
+            return String(localized: "\(entry.streakDays)-day rhythm") + " · " + inlineText
+        }
         return inlineText
     }
 
     private var inlineText: String {
-        guard let m = entry.minutesToNext else { return "Ready to ease" }
-        if m <= 0 { return "Ease up now" }
-        if m < 60 { return "Next in \(m)m" }
-        return "Next in \(m / 60)h"
+        guard let m = entry.minutesToNext else { return String(localized: "Ready to ease") }
+        if m <= 0 { return String(localized: "Ease up now") }
+        if m < 60 { return String(localized: "Next in \(m)m") }
+        return String(localized: "Next in \(m / 60)h")
     }
 }
 

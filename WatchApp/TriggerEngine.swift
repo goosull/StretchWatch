@@ -187,9 +187,11 @@ enum TriggerEngine {
         let content = UNMutableNotificationContent()
         // Vary the title so the buzz doesn't go invisible by week 3. The body
         // always carries the actual move, so it's doable straight from the banner.
-        content.title = ["A little reset?", "Ease up a moment", "Loosen up", "Quick unwind",
-                         "Time to ease up"].randomElement() ?? "Ease up a moment"
-        content.body = move.title
+        content.title = [String(localized: "A little reset?"), String(localized: "Ease up a moment"),
+                         String(localized: "Loosen up"), String(localized: "Quick unwind"),
+                         String(localized: "Time to ease up")].randomElement() ?? String(localized: "Ease up a moment")
+        // move.title is a catalog key; localize it for the banner body.
+        content.body = NSLocalizedString(move.title, comment: "stretch move title")
         content.categoryIdentifier = StretchConfig.notifCategory
         content.interruptionLevel = .active
         content.userInfo = ["sessionId": sid, "moveId": move.id]
@@ -201,11 +203,11 @@ enum TriggerEngine {
 
     private static func registerCategory() {
         let done = UNNotificationAction(identifier: StretchConfig.actionComplete,
-                                        title: "Did it", options: [])
+                                        title: String(localized: "Did it"), options: [])
         let snooze = UNNotificationAction(identifier: StretchConfig.actionSnooze,
-                                          title: "Later", options: [])
+                                          title: String(localized: "Later"), options: [])
         let skip = UNNotificationAction(identifier: StretchConfig.actionSkip,
-                                        title: "Not now", options: [])
+                                        title: String(localized: "Not now"), options: [])
         let category = UNNotificationCategory(identifier: StretchConfig.notifCategory,
                                               actions: [done, snooze, skip], intentIdentifiers: [],
                                               options: [])

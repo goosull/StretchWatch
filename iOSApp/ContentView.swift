@@ -162,7 +162,9 @@ private struct HeatCell: View {
                 .foregroundStyle(isToday ? Theme.paper : Theme.haze.opacity(0.7))
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(isToday ? "Today" : weekday), \(count) \(count == 1 ? "stretch" : "stretches")")
+        // Pre-localize the pieces: interpolating raw String literals into a
+        // LocalizedStringKey would not localize them. Korean has no plural, so one form.
+        .accessibilityLabel("\(isToday ? String(localized: "Today") : weekday): \(count) \(String(localized: "stretches"))")
     }
 }
 
