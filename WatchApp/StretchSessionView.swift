@@ -55,7 +55,7 @@ struct StretchSessionView: View {
 
     private var activeView: some View {
         VStack(spacing: 8) {
-            Text(stretch.title)
+            Text(LocalizedStringKey(stretch.title))  // model title is a catalog key
                 .font(Theme.display(18, .semibold)).foregroundStyle(Theme.paper)
                 .multilineTextAlignment(.center)
                 .minimumScaleFactor(0.7).lineLimit(2)
@@ -75,7 +75,8 @@ struct StretchSessionView: View {
             .frame(width: 96, height: 96)
             .scaleEffect(breath && !reduceMotion ? 1.03 : 1.0)
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("\(stretch.title), hold \(stretch.seconds) seconds")
+            .accessibilityLabel(String(format: NSLocalizedString("%@, hold %lld seconds", comment: "stretch a11y label"),
+                                       NSLocalizedString(stretch.title, comment: "stretch move title"), stretch.seconds))
 
             Button(action: skip) {
                 Text("Skip").font(Theme.display(13, .regular))
@@ -165,8 +166,9 @@ struct StretchSessionView: View {
 
     private var rewardLine: String {
         milestoneLine
-            ?? (["Nice.", "That's one.", "Your neck thanks you.", "Well eased."]
-                .randomElement() ?? "Nice.")
+            ?? ([String(localized: "Nice."), String(localized: "That's one."),
+                 String(localized: "Your neck thanks you."), String(localized: "Well eased.")]
+                .randomElement() ?? String(localized: "Nice."))
     }
 }
 

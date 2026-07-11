@@ -1,0 +1,20 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "NSHealthUpdateUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "StretchWatch can log each completed stretch as mindful minutes in Apple Health, if you turn it on in Settings." } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "StretchWatch는 완료한 스트레칭을 Apple 건강의 마음챙김 시간으로 기록할 수 있어요. 설정에서 켜면 됩니다." } }
+      }
+    },
+    "NSMotionUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "StretchWatch checks your recent movement to tell when you've been sitting a while, so it can remind you to stretch." } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "StretchWatch는 최근 움직임을 확인해 오래 앉아 있었는지 판단하고 스트레칭을 알려줘요." } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

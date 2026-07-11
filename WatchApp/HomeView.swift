@@ -111,6 +111,7 @@ struct HomeView: View {
                     .lineLimit(1).minimumScaleFactor(0.6)  // never overflow the face
                 Text("eased today")
                     .font(Theme.display(12 * typeScale, .regular)).foregroundStyle(Theme.haze)
+                    .lineLimit(1).minimumScaleFactor(0.7)  // Korean copy differs in length
             }
             .accessibilityElement(children: .combine)
             .accessibilityLabel("\(snapshot.todayCount) eased today")
@@ -126,7 +127,9 @@ struct HomeView: View {
             Text("Ready when you are")
                 .font(Theme.display(18 * typeScale, .semibold)).foregroundStyle(Theme.paper)
                 .multilineTextAlignment(.center).minimumScaleFactor(0.7)
-            Text(nextLine == "no reminder set" ? "Your first ease starts here." : nextLine)
+            // Pre-localize the literal branch: a ternary returning String makes Text
+            // verbatim, so a bare "..." literal here would stay English.
+            Text(minutesToNext == nil ? String(localized: "Your first ease starts here.") : nextLine)
                 .font(Theme.display(11 * typeScale, .regular)).foregroundStyle(Theme.haze)
                 .multilineTextAlignment(.center)
         }
@@ -181,6 +184,7 @@ struct HomeView: View {
                 .font(.system(size: 28, design: .rounded)).foregroundStyle(Theme.haze)
             Text("Reminders are off")
                 .font(Theme.display(15 * typeScale, .semibold)).foregroundStyle(Theme.paper)
+                .lineLimit(1).minimumScaleFactor(0.7)
             Text("Turn them on in the Watch Settings › Notifications › StretchWatch.")
                 .font(Theme.display(11 * typeScale, .regular)).foregroundStyle(Theme.haze)
                 .multilineTextAlignment(.center)
@@ -195,11 +199,15 @@ struct HomeView: View {
 
     // MARK: - Logic
 
+    // Produces the already-localized time-to-next line. `Text(nextLine)` shows a
+    // String verbatim, so localize HERE via String(localized:), not at the Text site.
+    // The "no reminder" state is signalled by `minutesToNext == nil`, never by
+    // comparing this display string (that comparison would break once localized).
     private var nextLine: String {
-        guard let m = minutesToNext else { return "no reminder set" }
-        if m <= 0 { return "any moment now" }
-        if m < 60 { return "next in \(m) min" }
-        return "next in \(m / 60)h \(m % 60)m"
+        guard let m = minutesToNext else { return String(localized: "no reminder set") }
+        if m <= 0 { return String(localized: "any moment now") }
+        if m < 60 { return String(localized: "next in \(m) min") }
+        return String(localized: "next in \(m / 60)h \(m % 60)m")
     }
 
     private func enable() {

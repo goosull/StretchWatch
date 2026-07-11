@@ -1,0 +1,261 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@: %lld stretches" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "%1$@: 스트레칭 %2$lld회" } } }
+    },
+    "%@, hold %lld seconds" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "%1$@, %2$lld초 유지" } } }
+    },
+    "%lld-day rhythm" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "%lld일째 리듬" } } }
+    },
+    "%lld eased today" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "오늘 %lld회 이완" } } }
+    },
+    "%lld of 7 days this week" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "이번 주 7일 중 %lld일" } } }
+    },
+    "%lld today. Lovely." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "오늘 %lld회. 좋아요." } } }
+    },
+    "A %lld-day rhythm." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "%lld일째 리듬이에요." } } }
+    },
+    "A gentle nudge to stretch when you've sat a while. No standing." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "오래 앉아 있으면 부드럽게 스트레칭하라고 알려드려요. 일어설 필요 없어요." } } }
+    },
+    "A little reset?" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "잠깐 풀어볼까요?" } } }
+    },
+    "any moment now" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "곧 알림이 와요" } } }
+    },
+    "Back" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "등" } } }
+    },
+    "best: %lld days" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "최고: %lld일" } } }
+    },
+    "Chin to chest, slow" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "턱을 가슴으로, 천천히" } } }
+    },
+    "Circle your left wrist" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "왼쪽 손목을 돌려요" } } }
+    },
+    "Circle your right wrist" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "오른쪽 손목을 돌려요" } } }
+    },
+    "Clear log" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "로그 지우기" } } }
+    },
+    "Did it" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "했어요" } } }
+    },
+    "Do your stretches on the watch.\nThis is just the mirror." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "스트레칭은 워치에서 하세요.\n여기는 거울일 뿐이에요." } } }
+    },
+    "Ease up a moment" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "잠깐 이완해요" } } }
+    },
+    "Ease up now" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "지금 이완해요" } } }
+    },
+    "Ease up, seated" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "앉아서 이완하세요" } } }
+    },
+    "Ease your neck left" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "목을 왼쪽으로 풀어요" } } }
+    },
+    "Ease your neck right" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "목을 오른쪽으로 풀어요" } } }
+    },
+    "eased today" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "오늘 이완" } } }
+    },
+    "Focus" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "집중 부위" } } }
+    },
+    "From" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "시작" } } }
+    },
+    "Interval" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "간격" } } }
+    },
+    "Just stretch now" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "그냥 지금 스트레칭" } } }
+    },
+    "Later" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "나중에" } } }
+    },
+    "Lean gently left" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "왼쪽으로 살짝 기울여요" } } }
+    },
+    "Lean gently right" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "오른쪽으로 살짝 기울여요" } } }
+    },
+    "Lift your shoulders, drop" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "어깨를 올렸다 툭 내려요" } } }
+    },
+    "Log to Apple Health" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "Apple 건강에 기록" } } }
+    },
+    "Look up, slowly" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "위를 봐요, 천천히" } } }
+    },
+    "Loosen up" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "몸을 풀어요" } } }
+    },
+    "next in %lld min" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "%lld분 후 알림" } } }
+    },
+    "next in %lldh %lldm" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "%1$lld시간 %2$lld분 후" } } }
+    },
+    "Neck" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "목" } } }
+    },
+    "Next in %lldh" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "%lld시간 후" } } }
+    },
+    "Next in %lldm" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "%lld분 후" } } }
+    },
+    "Nice." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "좋아요." } } }
+    },
+    "no reminder set" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "예약된 알림 없음" } } }
+    },
+    "Not now" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "지금은 아니에요" } } }
+    },
+    "Nothing to mirror yet" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "아직 비출 게 없어요" } } }
+    },
+    "Nothing to mirror yet. Stretch on the watch to begin." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "아직 비출 게 없어요. 워치에서 스트레칭을 시작하세요." } } }
+    },
+    "Nudge every" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "알림 간격" } } }
+    },
+    "Open your chest" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "가슴을 활짝 펴요" } } }
+    },
+    "%lld min" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "%lld분" } } }
+    },
+    "Quiet hours" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "방해 금지 시간" } } }
+    },
+    "Quick unwind" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "잠깐 풀어요" } } }
+    },
+    "Reach up and breathe" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "위로 뻗고 숨 쉬어요" } } }
+    },
+    "Ready" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "준비" } } }
+    },
+    "Ready to ease" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "이완할 시간" } } }
+    },
+    "Ready when you are" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "준비되면 시작하세요" } } }
+    },
+    "Ready when you are. Your first ease starts here." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "준비되면 시작하세요. 첫 이완을 여기서 시작하세요." } } }
+    },
+    "Records each stretch as mindful minutes in Health." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "각 스트레칭을 건강 앱의 마음챙김 시간으로 기록해요." } } }
+    },
+    "Reminders" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "알림" } } }
+    },
+    "Reminders are off" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "알림이 꺼져 있어요" } } }
+    },
+    "Roll your shoulders back" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "어깨를 뒤로 돌려요" } } }
+    },
+    "Round your upper back" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "등 위쪽을 둥글게 말아요" } } }
+    },
+    "Settings" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "설정" } } }
+    },
+    "Shoulders" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "어깨" } } }
+    },
+    "Silence overnight" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "밤에는 무음" } } }
+    },
+    "Skip" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "건너뛰기" } } }
+    },
+    "Skip this stretch" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "이 스트레칭 건너뛰기" } } }
+    },
+    "Standing desk" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "스탠딩 데스크" } } }
+    },
+    "Stretch now" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "지금 스트레칭" } } }
+    },
+    "stretches" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "스트레칭" } } }
+    },
+    "That's one." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "하나 했어요." } } }
+    },
+    "This week: %lld of 7 days, %lld stretches" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "이번 주: 7일 중 %1$lld일, 스트레칭 %2$lld회" } } }
+    },
+    "Time to ease up" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "이완할 시간이에요" } } }
+    },
+    "Today" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "오늘" } } }
+    },
+    "Today's count, your week's rhythm, and time to the next stretch." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "오늘의 횟수, 이번 주 리듬, 다음 스트레칭까지 남은 시간." } } }
+    },
+    "Turn gently to the left" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "왼쪽으로 부드럽게 돌려요" } } }
+    },
+    "Turn gently to the right" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "오른쪽으로 부드럽게 돌려요" } } }
+    },
+    "Turn on reminders" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "알림 켜기" } } }
+    },
+    "Turn them on in the Watch Settings › Notifications › StretchWatch." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "워치 설정 › 알림 › StretchWatch에서 켜세요." } } }
+    },
+    "Until" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "종료" } } }
+    },
+    "Well eased." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "잘 풀었어요." } } }
+    },
+    "Which areas to stretch. At least one stays on." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "어느 부위를 스트레칭할지. 최소 하나는 켜져 있어요." } } }
+    },
+    "When on, we lean off movement detection — a standing desk looks the same as sitting to the sensors." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "켜면 움직임 감지를 줄여요 — 스탠딩 데스크는 센서엔 앉은 것과 똑같이 보이거든요." } } }
+    },
+    "Wrists" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "손목" } } }
+    },
+    "Your first ease starts here." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "첫 이완을 여기서 시작하세요." } } }
+    },
+    "Your first ease will show up here.\nStretch on the watch to begin." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "첫 이완이 여기에 나타나요.\n워치에서 스트레칭을 시작하세요." } } }
+    },
+    "Your neck thanks you." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "목이 고마워해요." } } }
+    }
+  },
+  "version" : "1.0"
+}

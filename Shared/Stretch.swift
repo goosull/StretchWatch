@@ -108,8 +108,9 @@ enum StretchMilestone {
     /// A gentle line if this completion lands on a milestone, else nil. A streak
     /// milestone outranks the same-day count when both land at once.
     static func line(streakDays: Int, todayCount: Int) -> String? {
-        if streakMarks.contains(streakDays) { return "A \(streakDays)-day rhythm." }
-        if todayMarks.contains(todayCount)  { return "\(todayCount) today. Lovely." }
+        // Shown via Text(rewardLine) (verbatim), so localize here.
+        if streakMarks.contains(streakDays) { return String(localized: "A \(streakDays)-day rhythm.") }
+        if todayMarks.contains(todayCount)  { return String(localized: "\(todayCount) today. Lovely.") }
         return nil
     }
 

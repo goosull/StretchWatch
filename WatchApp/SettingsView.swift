@@ -29,7 +29,7 @@ struct SettingsView: View {
 
                 Section {
                     ForEach(Stretch.Region.allCases, id: \.self) { region in
-                        Toggle(region.title, isOn: regionBinding(region))
+                        Toggle(LocalizedStringKey(region.title), isOn: regionBinding(region))
                             .tint(Theme.ember)
                     }
                 } header: {
@@ -90,10 +90,12 @@ struct SettingsView: View {
         )
     }
 
+    /// Locale-aware hour label (e.g. "1 AM" in en, "오전 1시" in ko) instead of a
+    /// hardcoded am/pm suffix that would read wrong in Korean.
     private func hourLabel(_ h: Int) -> String {
-        let suffix = h < 12 ? "am" : "pm"
-        let twelve = h % 12 == 0 ? 12 : h % 12
-        return "\(twelve)\(suffix)"
+        let base = Calendar.current.startOfDay(for: Date())
+        let date = Calendar.current.date(byAdding: .hour, value: h, to: base) ?? base
+        return date.formatted(.dateTime.hour())
     }
 }
 
