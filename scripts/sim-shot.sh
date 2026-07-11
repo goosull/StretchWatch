@@ -5,7 +5,7 @@ set -e
 WATCH_ID="${WATCH_ID:-E494FCB2-940E-40F2-93E8-D2E0865A2C9C}"
 OUT_DIR="${OUT_DIR:-/private/tmp/claude-501/-Users-seungwonkim-orca-projects-StretchWatch/2282540f-44a4-4dee-8220-a21f690572db/scratchpad}"
 NAME="${1:-shot}"
-BUNDLE="com.seungwon.stretchwatch.watchkitapp"
+BUNDLE="com.goosull.stretchwatch.watchkitapp"
 
 cd "$(dirname "$0")/.."
 xcodebuild -project StretchWatch.xcodeproj -scheme "StretchWatch Watch App" \

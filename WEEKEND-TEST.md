@@ -17,7 +17,7 @@ open StretchWatch.xcodeproj
 In Xcode, for **each** of the 3 targets (StretchWatch, StretchWatch Watch App,
 StretchWatch Complication) → Signing & Capabilities:
 - Set **Team** to your Apple Developer account (the $99 one).
-- The bundle IDs use the prefix `com.seungwon.stretchwatch`. If Xcode says the ID is
+- The bundle IDs use the prefix `com.goosull.stretchwatch`. If Xcode says the ID is
   taken, change the prefix (e.g. `com.<you>.stretchwatch`) consistently across all 3
   targets **and** the App Group (`group.com.<you>.stretchwatch`) in
   `Shared/AppGroup.swift` + each target's entitlement.

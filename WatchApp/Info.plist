@@ -20,11 +20,13 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>StretchWatch can log each completed stretch as mindful minutes in Apple Health, if you turn it on in Settings.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>StretchWatch checks your recent movement to tell when you've been sitting a while, so it can remind you to stretch.</string>
 	<key>WKApplication</key>
 	<true/>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>com.seungwon.stretchwatch</string>
+	<string>com.goosull.stretchwatch</string>
 </dict>
 </plist>

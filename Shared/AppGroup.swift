@@ -3,7 +3,7 @@ import Foundation
 /// Shared constants for the App Group container that the watch app, its
 /// complication, and (later) the iOS app all read/write.
 enum AppGroup {
-    static let identifier = "group.com.seungwon.stretchwatch"
+    static let identifier = "group.com.goosull.stretchwatch"
 
     /// Container URL for the shared App Group, with a graceful fallback to the
     /// app's own Application Support directory. The fallback matters for unsigned
