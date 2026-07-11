@@ -1,6 +1,6 @@
 name: StretchWatch
 options:
-  bundleIdPrefix: com.seungwon.stretchwatch
+  bundleIdPrefix: com.goosull.stretchwatch
   deploymentTarget:
     iOS: "18.0"
     watchOS: "10.0"
@@ -38,10 +38,10 @@ targets:
       path: iOSApp/StretchWatch.entitlements
       properties:
         com.apple.security.application-groups:
-          - group.com.seungwon.stretchwatch
+          - group.com.goosull.stretchwatch
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.seungwon.stretchwatch
+        PRODUCT_BUNDLE_IDENTIFIER: com.goosull.stretchwatch
         INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 
@@ -60,19 +60,19 @@ targets:
       properties:
         CFBundleDisplayName: StretchWatch
         WKApplication: true
-        WKCompanionAppBundleIdentifier: com.seungwon.stretchwatch
+        WKCompanionAppBundleIdentifier: com.goosull.stretchwatch
         NSMotionUsageDescription: "StretchWatch checks your recent movement to tell when you've been sitting a while, so it can remind you to stretch."
         NSHealthUpdateUsageDescription: "StretchWatch can log each completed stretch as mindful minutes in Apple Health, if you turn it on in Settings."
     entitlements:
       path: WatchApp/StretchWatchWatch.entitlements
       properties:
         com.apple.security.application-groups:
-          - group.com.seungwon.stretchwatch
+          - group.com.goosull.stretchwatch
         com.apple.developer.healthkit: true
         com.apple.developer.healthkit.access: []
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.seungwon.stretchwatch.watchkitapp
+        PRODUCT_BUNDLE_IDENTIFIER: com.goosull.stretchwatch.watchkitapp
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 
   # ---------- unit tests (pure logic, iOS host) ----------
@@ -84,7 +84,7 @@ targets:
       - Shared
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.seungwon.stretchwatch.tests
+        PRODUCT_BUNDLE_IDENTIFIER: com.goosull.stretchwatch.tests
         GENERATE_INFOPLIST_FILE: YES
 
   # ---------- watch complication (WidgetKit extension) ----------
@@ -104,7 +104,7 @@ targets:
       path: Complication/StretchComplication.entitlements
       properties:
         com.apple.security.application-groups:
-          - group.com.seungwon.stretchwatch
+          - group.com.goosull.stretchwatch
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.seungwon.stretchwatch.watchkitapp.complication
+        PRODUCT_BUNDLE_IDENTIFIER: com.goosull.stretchwatch.watchkitapp.complication
