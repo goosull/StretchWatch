@@ -2,7 +2,9 @@ import SwiftUI
 
 struct SettingsView: View {
     @State private var settings = SettingsStore.load()
+    #if DEBUG
     @State private var showDiagnostics = false
+    #endif
 
     var body: some View {
         Form {
@@ -59,10 +61,14 @@ struct SettingsView: View {
                 Text("Records each stretch as mindful minutes in Health.")
             }
 
+            #if DEBUG
+            // Developer diagnostics (background-suppression hit-rate). DEBUG-only —
+            // never ships in a release build, so it stays English by design.
             Section {
                 Button("Spike #1 data") { showDiagnostics = true }
                     .foregroundStyle(Theme.haze)
             }
+            #endif
         }
         .navigationTitle("Settings")
         .onChange(of: settings) { old, new in
@@ -73,7 +79,9 @@ struct SettingsView: View {
                 Task { await HealthLogger.requestAuthorization() }
             }
         }
+        #if DEBUG
         .sheet(isPresented: $showDiagnostics) { SpikeView() }
+        #endif
     }
 
     /// Toggle for one region. Blocks turning off the last enabled area so the
