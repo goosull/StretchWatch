@@ -129,26 +129,3 @@ actor StretchStore {
         try? data.write(to: fileURL, options: .atomic)
     }
 }
-
-/// The small derived state the complication and phone dashboard show. Cliff-free
-/// primary numbers (today + weekly) lead; streak is secondary flavor.
-struct StretchSnapshot: Codable, Sendable {
-    var todayCount = 0
-    var streakDays = 0
-    var weeklyActiveDays = 0
-    /// Trailing 7 days of completion counts, oldest first ([6] = today). Empty on
-    /// decode of a pre-heatmap snapshot — the UI treats that as all-zero.
-    var weeklyCounts: [Int] = []
-    /// Longest-ever run of consecutive active days. Defaults to 0 for a snapshot
-    /// saved before this field existed.
-    var bestStreakDays = 0
-    var lastCompleted: Date?
-    var updatedAt = Date()
-
-    /// Whether there's ever been a completed stretch. Drives the dashboard's
-    /// first-run empty state so a brand-new user sees an invitation, not a wall
-    /// of zeros.
-    var hasHistory: Bool {
-        todayCount > 0 || weeklyActiveDays > 0 || bestStreakDays > 0 || lastCompleted != nil
-    }
-}

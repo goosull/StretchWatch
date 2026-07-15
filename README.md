@@ -1,8 +1,8 @@
 # StretchWatch
 
-A watchOS app that nudges you to do **one seated stretch** when you've been sitting
-too long — the opposite of Apple's "stand up and move" ring. Stay in your chair, tilt
-your neck, roll a shoulder, and get back to work.
+A watchOS app and a lightweight Mac menu-bar coach that nudge you to do **one seated
+stretch** when a computer session runs long — the opposite of Apple's "stand up and
+move" ring. Stay in your chair, tilt your neck, roll a shoulder, and get back to work.
 
 ## Why
 
@@ -55,6 +55,29 @@ xcodebuild test -project StretchWatch.xcodeproj -scheme "StretchWatchTests" \
   -destination "platform=iOS Simulator,name=iPhone 17" CODE_SIGNING_ALLOWED=NO
 ```
 
+### Mac menu-bar app
+
+The Mac target uses a 40-minute computer-session heuristic. Quartz's read-only global
+idle clock ends an automatic session after 10 minutes without input; it does not read
+keystrokes, windows, screenshots, or posture. Click **Enable reminders** in the menu
+bar to grant notification permission, then leave the app running in the menu bar.
+
+```bash
+xcodegen generate
+xcodebuild build -project StretchWatch.xcodeproj -scheme "StretchWatch Mac" \
+  -destination "platform=macOS" CODE_SIGNING_ALLOWED=NO
+
+# Build the unsigned Apple-silicon + Intel release zip
+./scripts/package-mac.sh
+./scripts/verify-mac-release.sh dist/StretchWatch-mac-v0.1.0-universal.zip
+```
+
+The GitHub artifact is intentionally unsigned in P0. On first launch, extract the zip,
+right-click `StretchWatch.app`, choose **Open**, and confirm **Open**. If macOS still
+blocks it, use **System Settings → Privacy & Security → Open Anyway**. A Developer ID
+certificate and notarization can remove this step later; they are not required for this
+dogfood release.
+
 ## Layout
 
 ```
@@ -62,13 +85,17 @@ Shared/       models + logic (Stretch, StretchStore, Settings, TriggerEngine con
 WatchApp/     watch UI + TriggerEngine + notification/sync plumbing
 iOSApp/       read-only dashboard + WatchConnectivity receiver
 Complication/ WidgetKit face complication
+MacApp/       menu-bar session coach, local notifications, SQLite state, guided panel
 Tests/        unit tests for the pure logic
+scripts/      icon helpers, simulator capture, Mac release packaging/verification
 ```
 
 Project file is generated (not committed) — always `xcodegen generate` after pulling.
 
 ## Status
 
-v1 in progress. Builds green (watch + iOS + complication), 11 unit tests passing. The one
-thing only real hardware can validate is the background suppression hit-rate — read it
-in-app via **Settings → Spike #1 data** after wearing it a few days.
+Mac P0 is implemented: automatic 40-minute sessions, 10-minute idle expiry, local
+notification actions, sleep/wake recovery, SQLite persistence, the guided `neck-right`
+overlay, and an unsigned universal release script. The Mac unit suite covers 47 tests.
+Notification response is still a dogfood question, so the next product check is whether
+the owner completes the intervention loop over several real work sessions.

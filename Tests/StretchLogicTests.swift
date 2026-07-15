@@ -343,4 +343,5 @@ final class StretchLogicTests: XCTestCase {
         let s = try JSONDecoder().decode(StretchSettings.self, from: Data("{}".utf8))
         XCTAssertEqual(s, StretchSettings())
     }
+
 }

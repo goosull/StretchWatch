@@ -255,6 +255,90 @@
     },
     "Your neck thanks you." : {
       "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "목이 고마워해요." } } }
+    },
+    "A gentle computer-session coach" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "컴퓨터 세션을 부드럽게 끊어요" } } }
+    },
+    "A quiet hour" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "잠깐 조용히 쉬는 시간" } } }
+    },
+    "A reminder arrives after 40 minutes of an active computer session." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "컴퓨터를 40분 동안 사용하면 알림을 보내요." } } }
+    },
+    "Breathe briefly and move gently." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "짧게 호흡하고 천천히 움직여요." } } }
+    },
+    "Checking notifications" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "알림 상태 확인 중" } } }
+    },
+    "Ease your neck right for 12 seconds." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "목을 오른쪽으로 12초만 풀어보세요." } } }
+    },
+    "Enable reminders" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "알림 켜기" } } }
+    },
+    "Finish what you are doing, then take a small reset." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "하던 일을 마무리하고 잠깐 풀어보세요." } } }
+    },
+    "Next reset" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "다음 리셋" } } }
+    },
+    "Notifications not set up" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "알림 준비 중" } } }
+    },
+    "Notifications off" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "알림 꺼짐" } } }
+    },
+    "Notifications on" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "알림 켜짐" } } }
+    },
+    "Notification permission is off" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "알림 권한이 꺼져 있어요" } } }
+    },
+    "Open Notification Settings" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "알림 설정 열기" } } }
+    },
+    "Open Notification Settings to let StretchWatch remind you." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "StretchWatch가 알려주도록 알림 설정을 열어주세요." } } }
+    },
+    "Paused today" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "오늘은 쉬어요" } } }
+    },
+    "Ready for a pause" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "잠깐 쉬어갈 준비가 됐어요" } } }
+    },
+    "Session in progress" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "세션을 기록하고 있어요" } } }
+    },
+    "Snoozed for 10 minutes" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "10분 뒤에 다시 알려드려요" } } }
+    },
+    "Start a session" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "세션 시작" } } }
+    },
+    "Stretching now" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "지금 이완하는 중이에요" } } }
+    },
+    "Stop if it hurts." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "아프면 멈춰요." } } }
+    },
+    "The next computer session is being prepared." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "다음 컴퓨터 세션을 준비해요." } } }
+    },
+    "Today: %lld" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "오늘: %lld회" } } }
+    },
+    "Start now" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "지금 하기" } } }
+    },
+    "In 10 minutes" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "10분 후" } } }
+    },
+    "Pause today" : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "오늘 쉬기" } } }
+    },
+    "Ease your neck right for 15 seconds? Stop if it hurts." : {
+      "localizations" : { "ko" : { "stringUnit" : { "state" : "translated", "value" : "목을 오른쪽으로 15초만 풀어볼까요? 아프면 멈춰요." } } }
     }
   },
   "version" : "1.0"
