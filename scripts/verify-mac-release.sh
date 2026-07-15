@@ -6,7 +6,10 @@ INPUT="${1:-$ROOT_DIR/dist/StretchWatch.app}"
 TEMP_DIR=""
 
 cleanup() {
-  if [[ -n "$TEMP_DIR" ]]; then rm -rf "$TEMP_DIR"; fi
+  if [[ -n "$TEMP_DIR" ]]; then
+    hdiutil detach "$TEMP_DIR" >/dev/null 2>&1 || true
+    rm -rf "$TEMP_DIR"
+  fi
 }
 trap cleanup EXIT
 
@@ -14,6 +17,14 @@ if [[ -f "$INPUT" && "$INPUT" == *.zip ]]; then
   TEMP_DIR="$(mktemp -d)"
   ditto -x -k "$INPUT" "$TEMP_DIR"
   APP_PATH="$TEMP_DIR/StretchWatch.app"
+elif [[ -f "$INPUT" && "$INPUT" == *.dmg ]]; then
+  TEMP_DIR="$(mktemp -d)"
+  hdiutil attach "$INPUT" -nobrowse -readonly -mountpoint "$TEMP_DIR" >/dev/null
+  APP_PATH="$TEMP_DIR/StretchWatch.app"
+  [[ -L "$TEMP_DIR/Applications" ]] || {
+    printf 'DMG is missing the Applications shortcut.\n' >&2
+    exit 1
+  }
 else
   APP_PATH="$INPUT"
 fi

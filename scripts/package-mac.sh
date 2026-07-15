@@ -9,6 +9,7 @@ APP_NAME="StretchWatch.app"
 VERSION="$(sed -n 's/^[[:space:]]*MARKETING_VERSION:[[:space:]]*"\([^"]*\)".*/\1/p' "$ROOT_DIR/project.yml" | head -1)"
 VERSION="${VERSION:-0.1.0}"
 ZIP_PATH="$DIST_DIR/StretchWatch-mac-v${VERSION}-universal.zip"
+DMG_PATH="$DIST_DIR/StretchWatch-mac-v${VERSION}-universal.dmg"
 
 if [[ "$ROOT_DIR" != */StretchWatch || ! -f "$ROOT_DIR/project.yml" ]]; then
   printf 'Refusing to package from unexpected root: %s\n' "$ROOT_DIR" >&2
@@ -16,7 +17,7 @@ if [[ "$ROOT_DIR" != */StretchWatch || ! -f "$ROOT_DIR/project.yml" ]]; then
 fi
 
 mkdir -p "$DIST_DIR"
-rm -rf "$WORK_DIR" "$DIST_DIR/$APP_NAME" "$ZIP_PATH"
+rm -rf "$WORK_DIR" "$DIST_DIR/$APP_NAME" "$ZIP_PATH" "$DMG_PATH"
 mkdir -p "$WORK_DIR/arm64" "$WORK_DIR/x86_64"
 
 cd "$ROOT_DIR"
@@ -59,10 +60,25 @@ lipo -create \
   -output "$MAIN_BINARY"
 
 ditto -c -k --sequesterRsrc --keepParent "$UNIVERSAL_APP" "$ZIP_PATH"
-SHA256="$(shasum -a 256 "$ZIP_PATH" | awk '{print $1}')"
+
+DMG_ROOT="$WORK_DIR/dmg-root"
+mkdir -p "$DMG_ROOT"
+ditto "$UNIVERSAL_APP" "$DMG_ROOT/$APP_NAME"
+ln -s /Applications "$DMG_ROOT/Applications"
+hdiutil create \
+  -volname "StretchWatch" \
+  -srcfolder "$DMG_ROOT" \
+  -ov \
+  -format UDZO \
+  "$DMG_PATH" >/dev/null
+
+ZIP_SHA256="$(shasum -a 256 "$ZIP_PATH" | awk '{print $1}')"
+DMG_SHA256="$(shasum -a 256 "$DMG_PATH" | awk '{print $1}')"
 
 printf '\nCreated: %s\n' "$ZIP_PATH"
-printf 'SHA-256: %s\n' "$SHA256"
+printf 'SHA-256: %s\n' "$ZIP_SHA256"
+printf 'Created: %s\n' "$DMG_PATH"
+printf 'SHA-256: %s\n' "$DMG_SHA256"
 printf 'Architectures: '
 lipo -info "$MAIN_BINARY"
 printf '\nUnsigned release note: right-click the app and choose Open on first launch.\n'

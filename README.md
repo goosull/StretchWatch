@@ -67,16 +67,17 @@ xcodegen generate
 xcodebuild build -project StretchWatch.xcodeproj -scheme "StretchWatch Mac" \
   -destination "platform=macOS" CODE_SIGNING_ALLOWED=NO
 
-# Build the unsigned Apple-silicon + Intel release zip
+# Build the unsigned Apple-silicon + Intel release ZIP and DMG
 ./scripts/package-mac.sh
 ./scripts/verify-mac-release.sh dist/StretchWatch-mac-v0.1.0-universal.zip
+./scripts/verify-mac-release.sh dist/StretchWatch-mac-v0.1.0-universal.dmg
 ```
 
-The GitHub artifact is intentionally unsigned in P0. On first launch, extract the zip,
-right-click `StretchWatch.app`, choose **Open**, and confirm **Open**. If macOS still
-blocks it, use **System Settings → Privacy & Security → Open Anyway**. A Developer ID
-certificate and notarization can remove this step later; they are not required for this
-dogfood release.
+The GitHub artifacts are intentionally unsigned in P0. For the DMG, drag
+`StretchWatch.app` to the Applications shortcut. On first launch, right-click the app,
+choose **Open**, and confirm **Open**. If macOS still blocks it, use **System Settings →
+Privacy & Security → Open Anyway**. A Developer ID certificate and notarization can
+remove this step later; they are not required for this dogfood release.
 
 ## Layout
 
